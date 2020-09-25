@@ -404,6 +404,8 @@ def temporizador():
 	
 	global counter 
 	global text
+
+	var = True 
 	while True:
     
 			
@@ -413,10 +415,15 @@ def temporizador():
 				if event.type == pygame.USEREVENT:
 					counter-= 1
 					text =str(counter).rjust(3)if counter >0 else "A jugar!"
-					
+					var= False	
+					if counter ==0:
 
-				if event.type == pygame.QUIT:break
-				
+						break
+
+
+
+				#if event.type == pygame.QUIT:break
+					
 			else:
 				pantalla.blit(background,[0,0])
 
