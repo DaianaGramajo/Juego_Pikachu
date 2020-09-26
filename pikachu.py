@@ -10,7 +10,6 @@ verde=(0,255,0)
 azul=(0,0,255)
 plomo=(232,224,224)
 
-
 pantalla=pygame.display.set_mode((ancho,alto))
 icono= pygame.image.load("assets/poke.png")
 pygame.display.set_caption("Pokemon")
@@ -22,7 +21,6 @@ pequeñafuente=pygame.font.SysFont("comicsansms",15)
 medianafuente=pygame.font.SysFont("comicsansms",30)
 grandefuente=pygame.font.SysFont("comicsansms",50)
 font = pygame.font.SysFont('Consolas', 30)
-
 
 #datos de boton
 boton1=(300,290)
@@ -44,10 +42,6 @@ boton8=(300,390)
 colorboton8 =[plomo,rojo]
 boton9 =(450,200)
 colorboton9 =[plomo,rojo]
-
-
-
-
 
 def draw_text(surface, text, size, x, y):
 	font = pygame.font.SysFont("comicsansms", size)
@@ -95,9 +89,26 @@ class Player(pygame.sprite.Sprite):
 		bullets.add(bullet)
 		laser_sound.play()
 
-	
-
 class Pokebol(pygame.sprite.Sprite):
+	def __init__(self):
+		super().__init__()
+		self.image = random.choice(pokebol_images)
+		self.image.set_colorkey(blanco)
+		self.rect = self.image.get_rect()
+		self.rect.x = random.randrange(ancho - self.rect.width)
+		self.rect.y = random.randrange(-140, -100)
+		self.speedy = random.randrange(1, 5)
+		self.speedx = random.randrange(-2, 2)
+
+	def update(self):
+		self.rect.y += self.speedy
+		self.rect.x += self.speedx
+		if self.rect.top > alto + 10 or self.rect.left < -40 or self.rect.right > ancho + 40:
+			self.rect.x = random.randrange(ancho - self.rect.width)
+			self.rect.y = random.randrange(-140, - 100)
+			self.speedy = random.randrange(1, 5)
+
+class Pokebol2(pygame.sprite.Sprite):
 	def __init__(self):
 		super().__init__()
 		self.image = random.choice(pokebol_images)
@@ -116,20 +127,25 @@ class Pokebol(pygame.sprite.Sprite):
 			self.rect.y = random.randrange(-140, - 100)
 			self.speedy = random.randrange(1, 10)
 
-class Bullet(pygame.sprite.Sprite):
-	def __init__(self, x, y):
+class Pokebol3(pygame.sprite.Sprite):
+	def __init__(self):
 		super().__init__()
-		self.image = pygame.image.load("assets/rayito1.PNG")
-		self.image.set_colorkey(negro)
+		self.image = random.choice(pokebol_images)
+		self.image.set_colorkey(blanco)
 		self.rect = self.image.get_rect()
-		self.rect.y = y
-		self.rect.centerx = x
-		self.speedy = -10
+		self.rect.x = random.randrange(ancho - self.rect.width)
+		self.rect.y = random.randrange(-140, -100)
+		self.speedy = random.randrange(1, 15)
+		self.speedx = random.randrange(-2, 2)
 
 	def update(self):
 		self.rect.y += self.speedy
-		if self.rect.bottom < 0:
-			self.kill()
+		self.rect.x += self.speedx
+		if self.rect.top > alto + 10 or self.rect.left < -40 or self.rect.right > ancho + 40:
+			self.rect.x = random.randrange(ancho - self.rect.width)
+			self.rect.y = random.randrange(-140, - 100)
+			self.speedy = random.randrange(1, 15)
+
 
 class Explosion(pygame.sprite.Sprite):
 	def __init__(self, center):
@@ -154,21 +170,41 @@ class Explosion(pygame.sprite.Sprite):
 				self.rect = self.image.get_rect()
 				self.rect.center = center
 
+class Bullet(pygame.sprite.Sprite):
+	def __init__(self, x, y):
+		super().__init__()
+		self.image = pygame.image.load("assets/rayito1.PNG")
+		self.image.set_colorkey(negro)
+		self.rect = self.image.get_rect()
+		self.rect.y = y
+		self.rect.centerx = x
+		self.speedy = -10
+
+	def update(self):
+		self.rect.y += self.speedy
+		if self.rect.bottom < 0:
+			self.kill()
+
 pokebol_images = []
 pokebol_list = ["assets/great3.png", "assets/master2.png","assets/safari1.png","assets/poke1.png","assets/ultra2.png"]
 for img in pokebol_list:
 	pokebol_images.append(pygame.image.load(img).convert())
 
+####----------------EXPLOSTION IMAGENES --------------
+explosion_anim = []
+for i in range(9):
+	file = "assets/regularExplosion0{}.png".format(i)
+	img = pygame.image.load(file).convert()
+	img.set_colorkey(negro)
+	img_scale = pygame.transform.scale(img, (70,70))
+	explosion_anim.append(img_scale)
 
-
-# Cargar imagen de fondo
 background = pygame.image.load("assets/back.jpg").convert()
 pausa1=pygame.image.load("assets/pausar.jpg").convert()
 perdio=pygame.image.load("assets/perdio.jpg").convert()
 credits=pygame.image.load("assets/cred.jpg").convert()
 menu=pygame.image.load("assets/fondito.png").convert()
-gano=pygame.image.load("assets/gana.png").convert()
-
+gano=pygame.image.load("assets/ganador.png").convert()
 
 # Cargar sonidos
 laser_sound = pygame.mixer.Sound("assets/pika.ogg")
@@ -190,16 +226,12 @@ for i in range(8):
 
 #Marcador / Score
 score = 0
-
 suma = 0
+
 #----temporizador -----
 counter, text = 3, '3'.rjust(3)
 pygame.time.set_timer(pygame.USEREVENT, 1000)
 
-
-
-
- #----------Puntuacion-------------
 
 def puntos(marcador):
 	mensaje=tamaño="mediano".render("Puntos:  "+ str(marcador),True,negro)
@@ -211,7 +243,6 @@ def textoboton(msg,color,botonx,botony,ancho,alto,tamaño="pequeño"):
 	textorect.center=(botonx+ round(ancho/2),botony+round(alto/2))
 	pantalla.blit(textosuperficie,textorect)
 
-
 def botones(texto,superficie,estado,posicionamiento,tam,identidad=None):
 	cursor=pygame.mouse.get_pos()
 	click =pygame.mouse.get_pressed()
@@ -219,10 +250,7 @@ def botones(texto,superficie,estado,posicionamiento,tam,identidad=None):
 	if posicionamiento[0]+tam[0] > cursor[0] > tam[0] and posicionamiento[1]+ tam[1] > cursor[1] > tam[1] and posicionamiento[1] +tam[1] < cursor[1] + tam[1]:
 		if click[0] ==1:
 			if identidad == "comienzo":
-				
 				gameloop()
-
-			
 			elif identidad == "configuracion":
 				opciones()
 			elif identidad == "salir":
@@ -239,23 +267,12 @@ def botones(texto,superficie,estado,posicionamiento,tam,identidad=None):
 				introduccion()
 			elif identidad =="Intentarotravez":
 				gameloop()
-
 		boton = pygame.draw.rect(superficie,estado[1],(posicionamiento[0],posicionamiento[1],tam[0],tam[1]))
 		textoboton(texto,negro,posicionamiento[0],posicionamiento[1],tam[0],tam[1])
 	else:
 		boton = pygame.draw.rect(superficie,estado[0],(posicionamiento[0],posicionamiento[1],tam[0],tam[1]))
 		textoboton(texto,negro,posicionamiento[0],posicionamiento[1],tam[0],tam[1])
 	return boton
-
-def gano():
-	gana=True
-	while gana:
-		pantalla.blit(gano,[0,0])
-		mensaje("¡Ganaste!",negro,-200,tamaño="grande")
-		mensaje("Tu puntuacion obtenida fue:  " + str(suma),negro,-150,tamaño="mediano")
-		pygame.display.update()
-
-
 
 def fin_juego():
 	fin =True
@@ -265,20 +282,17 @@ def fin_juego():
 		mensaje("Tu puntuacion obtenida fue:  " + str(suma),negro,-150,tamaño="mediano")
 		botones("Salir",pantalla,colorboton5,boton5,tamboton,identidad="salirPerder")
 		botones("Ir al menu",pantalla,colorboton4,boton4,tamboton,identidad="Volver al menu")
-		#botones("Volver a Jugar",pantalla,colorboton9,boton9,tamboton,identidad="Intentarotravez")
+		botones("Volver a Jugar",pantalla,colorboton9,boton9,tamboton,identidad="Intentarotravez")
 		pygame.display.update()
 		for event in pygame.event.get():
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_c:
-
 					introduccion()
 					fin=False
-
 				if event.key == pygame.K_x:
 					quit()
 				if event.type == pygame.QUIT:
 					fin=True
-
 
 def objetotexto(texto,color,tamaño):
 	if tamaño == "pequeño":
@@ -287,7 +301,6 @@ def objetotexto(texto,color,tamaño):
 		textosuperficie = medianafuente.render(texto,True,color)
 	if tamaño == "grande":
 		textosuperficie = grandefuente.render(texto,True,color)
-
 	return textosuperficie, textosuperficie.get_rect()
 
 
@@ -295,7 +308,6 @@ def mensaje(msg,color,desplazamientoy=0,tamaño="pequeño"):
 	textosuperficie, textorect= objetotexto(msg,color,tamaño)
 	textorect.center = round(ancho/2), round(alto/2)+desplazamientoy
 	pantalla.blit(textosuperficie,textorect)
-
 
 def pausa():
 	pausado=True
@@ -306,35 +318,28 @@ def pausa():
 			if event.type==pygame.KEYDOWN:
 				if event.key==pygame.K_F1:
 					pygame.mixer.music.unpause()
-                    pausado=False
-                if event.key==pygame.K_F2:
-                	quit()
-
+					pausado=False
+				if event.key==pygame.K_F2:
+					quit()
 		pantalla.blit(pausa1,[0,0])
 		mensaje("Pausa",negro,-230,tamaño="grande")
 		botones("Continuar",pantalla,colorboton6,boton6,tamboton,identidad="F1")
 		botones("Salir",pantalla,colorboton7,boton7,tamboton,identidad="F2")
-		
 		pygame.display.flip()
-
-
 
 def introduccion():
 
 	intro=True
-
 	pantalla.blit(menu,[0,0])
 	while intro:
 		pygame.mixer.music.stop()
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				intro=False
-
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_s:
 					gameloop()
 					intro=False
-
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_p:
 					opciones()
@@ -352,11 +357,13 @@ def introduccion():
 			pygame.display.update()
 			reloj.tick(60)
 
-
 def opciones():
-
-		waiting = True
-		while waiting:
+	waiting = True
+	while waiting:
+		for action in pygame.event.get():
+			if action.type == pygame.KEYDOWN:
+				if action.key == pygame.K_x:
+					introduccion()
 			pantalla.blit(credits,[0,0])
 			mensaje(" CONTROLES ",negro,-220,tamaño="grande")
 			mensaje(" Movimiento hacia la izquierda = Flecha izquierda ",blanco,-150,tamaño="mediano")
@@ -364,14 +371,30 @@ def opciones():
 			mensaje(" Disparos = space",blanco,-50,tamaño="mediano")
 			mensaje(" Pausa = p",blanco,0,tamaño="mediano")  
 			botones("Volver al menu",pantalla,colorboton8,boton8,tamboton,identidad="VolveralmenuOpciones")
-		#	mensaje(" Presione  X para volver Atras",negro,150,tamaño="pequeño")
-			pygame.display.flip()  # Print the contents to the screen
-			for action in pygame.event.get():
-				if action.type == pygame.KEYDOWN:
-					if action.key == pygame.K_x:
-						introduccion() 
+			pygame.display.flip()
+			  # Print the contents to the screen
+
+
+def ganador():
+	fin =True
+	while fin:
+		pantalla.blit(gano,[0,0])
+		mensaje("¡ganaste! ",negro,-200,tamaño="grande")
+		mensaje("ir al menu:c ",negro,-100,tamaño="mediano")
+		mensaje("salir:x ",negro,-50,tamaño="mediano")
+		pygame.display.update()
+		for event in pygame.event.get():
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_c:
+					introduccion()
+					fin=False
+				if event.key == pygame.K_x:
+					quit()
+				if event.type == pygame.QUIT:
+					fin=True
 
 def temporizador(): 
+	
 	global counter 
 	global text
 
@@ -384,39 +407,28 @@ def temporizador():
 				var= False	
 				if counter ==0:
 					break
-			else:
-				pantalla.blit(background,[0,0])
-				pantalla.blit(font.render(text, True, (negro)), (350,200))
-
-				pygame.display.flip()
-				 # reloj.tick(60)
-				continue
-			break
-
-
-						
-
-
-                                      
-#--------BUCLE PRINCIPAL---------------------
+		else:
+			pantalla.blit(background,[0,0])
+			pantalla.blit(font.render(text, True, (negro)), (350,200))
+			pygame.display.flip()
+			continue
+		break
+		
+		
 def gameloop():
 
-	
 	player.shield =100
 	salir=True
 	score = 0
 	global suma
 	temporizador()
-
 	pygame.mixer.music.play(loops=-1)
-
 
 	while salir:
 		reloj.tick(60)
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				salir=False
-				quit()
 
 			elif event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_SPACE:
@@ -424,17 +436,12 @@ def gameloop():
 				if event.key == pygame.K_p:	
 					pausa()
 
-			
-		
-			#mensaje("bucle pricipal del juego",rojo,tamaño="grande")
-		
-
 		all_sprites.update()
 
-		# Colisiones pokebolas - rayito
-		hits = pygame.sprite.groupcollide(pokebol_list, bullets, True, True)
-		for hit in hits:
+		# Colisiones meteoro - laser
 
+		hits = pygame.sprite.groupcollide(pokebol_list,bullets, True, True)
+		for hit in hits:
 			score += 1
 			explosion = Explosion(hit.rect.center)
 			all_sprites.add(explosion)
@@ -443,51 +450,159 @@ def gameloop():
 			all_sprites.add(pokebol)
 			pokebol_list.add(pokebol)
 			suma =suma+1
+			if score>=10:
+				gameloop2()
 
 
+		# Colisiones jugador - meteoro
 
-			   
-			
-
-		# Colisiones jugador - pokebolas
 		hits = pygame.sprite.spritecollide(player, pokebol_list, True)
-
 		for hit in hits:
-
 			player.shield -= 25
-
 			pokebol = Pokebol()
 			all_sprites.add(pokebol)
 			pokebol_list.add(pokebol)
 			if player.shield <= 0:
-				pygame.mixer.music.stop()
 				fin_juego()
-			
-			if player.shield >0 and score == 30:
-				gano()
 
-		
+
 		pantalla.blit(background, [0, 0])
-	
-
-
-		
-		
-
 		all_sprites.draw(pantalla)
-
-
 		# Marcador
 		draw_text(pantalla, str(score), 25, 770, 10)
+		draw_text(pantalla,"nivel 1",30,400,10)
 
 		# ESCUDO.
 		draw_shield_bar(pantalla, 5, 5, player.shield)
 
+		pygame.display.flip()
+
+
+def gameloop2():
+
+	player.shield =100
+	salir=True
+	score = 10
+	global suma
+
+	while salir:
+		reloj.tick(60)
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				salir=False
+
+			elif event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_SPACE:
+					player.shoot()
+				if event.key == pygame.K_p:	
+					pausa()
+
+		all_sprites.update()
+
+		# Colisiones meteoro - laser
+
+		hits = pygame.sprite.groupcollide(pokebol_list,bullets, True, True)
+		for hit in hits:
+			score += 1
+			explosion = Explosion(hit.rect.center)
+			all_sprites.add(explosion)
+			pokebol = Pokebol2()
+			all_sprites.add(pokebol)
+			pokebol_list.add(pokebol)
+			suma =suma+1
+			if score>=30:
+				gameloop3()
+
+		# Colisiones jugador - meteoro
+
+		hits = pygame.sprite.spritecollide(player, pokebol_list, True)
+		for hit in hits:
+			player.shield -= 25
+			pokebol = Pokebol2()
+			all_sprites.add(pokebol)
+			pokebol_list.add(pokebol)
+			if player.shield <= 0:
+				fin_juego()
+
+
+		pantalla.blit(background, [0, 0])
+		all_sprites.draw(pantalla)
+		# Marcador
+		draw_text(pantalla, str(score), 25, 770, 10)
+		draw_text(pantalla,"nivel 2",30,400,10)
+
+		# ESCUDO.
+		draw_shield_bar(pantalla, 5, 5, player.shield)
 
 		pygame.display.flip()
 
 
+def gameloop3():
+
+	player.shield =100
+	salir=True
+	score = 30
+	global suma
+
+	while salir:
+		reloj.tick(60)
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				salir=False
+
+			elif event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_SPACE:
+					player.shoot()
+				if event.key == pygame.K_p:	
+					pausa()
+
+		all_sprites.update()
+
+		# Colisiones meteoro - laser
+
+		hits = pygame.sprite.groupcollide(pokebol_list,bullets, True, True)
+		for hit in hits:
+			score += 1
+			explosion = Explosion(hit.rect.center)
+			all_sprites.add(explosion)
+			pokebol = Pokebol3()
+			all_sprites.add(pokebol)
+			pokebol_list.add(pokebol)
+			suma =suma+1
+			if score>=50:
+				ganador()
+
+		# Colisiones jugador - meteoro
+
+		hits = pygame.sprite.spritecollide(player, pokebol_list, True)
+		for hit in hits:
+			player.shield -= 25
+			pokebol = Pokebol3()
+			all_sprites.add(pokebol)
+			pokebol_list.add(pokebol)
+			if player.shield <= 0:
+				fin_juego()
+
+
+		pantalla.blit(background, [0, 0])
+		all_sprites.draw(pantalla)
+		# Marcador
+		draw_text(pantalla, str(score), 25, 770, 10)
+		draw_text(pantalla,"nivel 3",30,400,10)
+
+		# ESCUDO.
+		draw_shield_bar(pantalla, 5, 5, player.shield)
+
+		pygame.display.flip()
+
+
+
 introduccion()
 quit()
-
 gameloop()
+gameloop2()
+gameloop3()
+
+
+
+
