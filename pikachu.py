@@ -204,7 +204,7 @@ pausa1=pygame.image.load("assets/pausar.jpg").convert()
 perdio=pygame.image.load("assets/perdio.jpg").convert()
 credits=pygame.image.load("assets/cred.jpg").convert()
 menu=pygame.image.load("assets/fondito.png").convert()
-gano=pygame.image.load("assets/ganador.png").convert()
+gano=pygame.image.load("assets/gana.png").convert()
 
 # Cargar sonidos
 laser_sound = pygame.mixer.Sound("assets/pika.ogg")
@@ -379,9 +379,13 @@ def ganador():
 	fin =True
 	while fin:
 		pantalla.blit(gano,[0,0])
-		mensaje("¡ganaste! ",negro,-200,tamaño="grande")
-		mensaje("ir al menu:c ",negro,-100,tamaño="mediano")
-		mensaje("salir:x ",negro,-50,tamaño="mediano")
+		
+		mensaje("¡Ganaste!",negro,-200,tamaño="grande")
+		mensaje("Tu puntuacion obtenida fue:  " + str(suma),negro,-150,tamaño="mediano")
+		botones("Salir",pantalla,colorboton5,boton5,tamboton,identidad="salirPerder")
+		botones("Ir al menu",pantalla,colorboton4,boton4,tamboton,identidad="Volver al menu")
+		#mensaje("ir al menu:c ",negro,-100,tamaño="mediano")
+		#mensaje("salir:x ",negro,-50,tamaño="mediano")
 		pygame.display.update()
 		for event in pygame.event.get():
 			if event.type == pygame.KEYDOWN:
