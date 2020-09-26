@@ -119,7 +119,7 @@ class Pokebol(pygame.sprite.Sprite):
 class Bullet(pygame.sprite.Sprite):
 	def __init__(self, x, y):
 		super().__init__()
-		self.image = pygame.image.load("assets/rayito1.PNG")
+		self.image = pygame.image.load("assets/rayoo.PNG")
 		self.image.set_colorkey(negro)
 		self.rect = self.image.get_rect()
 		self.rect.y = y
