@@ -53,7 +53,7 @@ def draw_text(surface, text, size, x, y):
 	font = pygame.font.SysFont("comicsansms", size)
 	text_surface = font.render(text, True,negro)
 	text_rect = text_surface.get_rect()
-	text_rect.midtop = (round(x), round(y))
+	text_rect.midtop = (x,y)
 	surface.blit(text_surface, text_rect)
 
 def draw_shield_bar(surface, x, y, percentage):
@@ -226,10 +226,8 @@ def botones(texto,superficie,estado,posicionamiento,tam,identidad=None):
 	if posicionamiento[0]+tam[0] > cursor[0] > tam[0] and posicionamiento[1]+ tam[1] > cursor[1] > tam[1] and posicionamiento[1] +tam[1] < cursor[1] + tam[1]:
 		if click[0] ==1:
 			if identidad == "comienzo":
-				
 				gameloop()
 
-			
 			elif identidad == "configuracion":
 				opciones()
 			elif identidad == "salir":
@@ -258,10 +256,34 @@ def gano():
 	gana=True
 	while gana:
 
-			pantalla.blit(gano,[0,0])
+			#pantalla.blit(gano,[0,0])
 			mensaje("¡Ganaste!",negro,-200,tamaño="grande")
 			mensaje("Tu puntuacion obtenida fue:  " + str(suma),negro,-150,tamaño="mediano")
+			#pantalla.blit(gano,[0,0])
+			botones("Salir",pantalla,colorboton5,boton5,tamboton,identidad="salirPerder")
+			botones("Ir al menu",pantalla,colorboton4,boton4,tamboton,identidad="Volver al menu")
+		#	botones("Volver a Jugar",pantalla,colorboton9,boton9,tamboton,identidad="Intentarotravez")
+
+
+		
+	#	mensaje("Presione: ",negro,-150,tamaño="mediano")
+	#	mensaje("Para volver al menu: c ",negro,-80,tamaño="mediano")
+	#	mensaje("Para salir del juego: x ",negro,-30,tamaño="mediano")
 			pygame.display.update()
+			for event in pygame.event.get():
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_c:
+
+						introduccion()
+						fin=False
+
+					if event.key == pygame.K_x:
+						quit()
+					if event.type == pygame.QUIT:
+						fin=True
+
+
+				pygame.display.update()
 
 
 
@@ -490,6 +512,10 @@ def gameloop():
 			pokebol = Pokebol()
 			all_sprites.add(pokebol)
 			pokebol_list.add(pokebol)
+			if score >= 31:
+				pygame.mixer.music.stop()
+				gano()
+
 			suma =suma+1
 
 
@@ -511,8 +537,8 @@ def gameloop():
 				pygame.mixer.music.stop()
 				fin_juego()
 			
-			if player.shield >0 and score == 30:
-				gano()
+			#if score >= 5:
+			#	gano()
 
 		
 		pantalla.blit(background, [0, 0])
