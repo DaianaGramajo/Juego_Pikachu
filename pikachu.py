@@ -205,7 +205,8 @@ perdio=pygame.image.load("assets/perdio.jpg").convert()
 credits=pygame.image.load("assets/cred.jpg").convert()
 menu=pygame.image.load("assets/fondito.png").convert()
 gano=pygame.image.load("assets/gana.png").convert()
-
+nivel2= pygame.image.load("assets/3.png").convert()
+nivel3= pygame.image.load("assets/4.jpg").convert()
 # Cargar sonidos
 laser_sound = pygame.mixer.Sound("assets/pika.ogg")
 explosion_sound = pygame.mixer.Sound("assets/explosion.wav")
@@ -529,7 +530,7 @@ def gameloop2():
 				fin_juego()
 
 
-		pantalla.blit(background, [0, 0])
+		pantalla.blit(nivel2, [0, 0])
 		all_sprites.draw(pantalla)
 		# Marcador
 		draw_text(pantalla, str(score), 25, 770, 10)
@@ -588,7 +589,7 @@ def gameloop3():
 				fin_juego()
 
 
-		pantalla.blit(background, [0, 0])
+		pantalla.blit(nivel3, [0, 0])
 		all_sprites.draw(pantalla)
 		# Marcador
 		draw_text(pantalla, str(score), 25, 770, 10)
