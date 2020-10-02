@@ -452,6 +452,7 @@ def gameloop():
 	pygame.mixer.music.play(loops=-1)
 	pygame.mixer.Sound.stop(cmenu)
 	pygame.mixer.Sound.stop(perder)
+	pygame.mixer.Sound.stop(vict)
 
 	while salir:
 		reloj.tick(60)
