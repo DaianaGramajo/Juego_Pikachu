@@ -30,13 +30,13 @@ boton2=(300,340)
 colorboton2=[plomo,rojo]
 boton3=(300,390)
 colorboton3=[plomo,rojo]
-boton4=(300,300)
+boton4=(450,300)
 colorboton4=[plomo,rojo]
-boton5=(300,350)
+boton5=(450,400)
 colorboton5=[plomo,rojo]
-boton6=(250,200)
+boton6=(200,200)
 colorboton6=[plomo,rojo]
-boton7=(200,250)
+boton7=(200,300)
 colorboton7=[plomo,rojo]
 boton8=(300,390)
 colorboton8 =[plomo,rojo]
@@ -206,11 +206,13 @@ perdio=pygame.image.load("assets/perdio.jpg").convert()
 credits=pygame.image.load("assets/cred.jpg").convert()
 menu=pygame.image.load("assets/fondito.png").convert()
 gano=pygame.image.load("assets/gana.png").convert()
-
+nivel2= pygame.image.load("assets/3.png").convert()
+nivel3= pygame.image.load("assets/4.jpg").convert()
 # Cargar sonidos
 laser_sound = pygame.mixer.Sound("assets/pika.ogg")
-#explosion_sound = pygame.mixer.Sound("assets/explosion.wav")
+explosion_sound = pygame.mixer.Sound("assets/explosion.wav")
 pygame.mixer.music.load("assets/music1.ogg")
+pygame.mixer.music.set_volume(0.1)
 perder=pygame.mixer.Sound("assets/triste.ogg")
 cmenu=pygame.mixer.Sound("assets/menu.ogg")
 vict=pygame.mixer.Sound("assets/victoria.ogg")
@@ -330,8 +332,12 @@ def pausa():
 					pygame.mixer.music.unpause()
 				if event.key==pygame.K_F2:
 					quit()
+				if event.key==pygame.K_p: # TECLA P PARA SALIR DE LA PAUSA.
+					pausado=False
+
 		pantalla.blit(pausa1,[0,0])
 		mensaje("Pausa",negro,-230,tamaño="grande")
+		mensaje("Presione P para continuar",negro,-130,tamaño="grande")
 		#botones("Continuar",pantalla,colorboton6,boton6,tamboton,identidad="F1")
 		#botones("Salir",pantalla,colorboton7,boton7,tamboton,identidad="F2")
 		pygame.display.flip()
@@ -395,11 +401,11 @@ def ganador():
 	vict.play()
 	while fin:
 		pantalla.blit(gano,[0,0])
-		
 		mensaje("¡Ganaste!",negro,-200,tamaño="grande")
 		mensaje("Tu puntuacion obtenida fue:  " + str(suma),negro,-150,tamaño="mediano")
 		botones("Salir",pantalla,colorboton5,boton5,tamboton,identidad="salirPerder")
 		botones("Ir al menu",pantalla,colorboton4,boton4,tamboton,identidad="Volver al menu")
+		botones("Volver a Jugar",pantalla,colorboton9,boton9,tamboton,identidad="Intentarotravez")
 		#mensaje("ir al menu:c ",negro,-100,tamaño="mediano")
 		#mensaje("salir:x ",negro,-50,tamaño="mediano")
 		pygame.display.update()
@@ -548,7 +554,7 @@ def gameloop2():
 				fin_juego()
 
 
-		pantalla.blit(background, [0, 0])
+		pantalla.blit(nivel2, [0, 0])
 		all_sprites.draw(pantalla)
 		# Marcador
 		draw_text(pantalla, str(score), 25, 770, 10)
@@ -607,7 +613,7 @@ def gameloop3():
 				fin_juego()
 
 
-		pantalla.blit(background, [0, 0])
+		pantalla.blit(nivel3, [0, 0])
 		all_sprites.draw(pantalla)
 		# Marcador
 		draw_text(pantalla, str(score), 25, 770, 10)
