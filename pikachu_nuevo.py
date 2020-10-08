@@ -329,7 +329,9 @@ def pausa():
 		pantalla.blit(pausa1,[0,0])
 		mensaje("Pausa",negro,-230,tamaño="grande")
 		#botones("Continuar",pantalla,colorboton6,boton6,tamboton,identidad="F1")
-		#botones("Salir",pantalla,colorboton7,boton7,tamboton,identidad="F2")
+		draw_text(pantalla,"Presione: ",30,130,200)
+		draw_text(pantalla," F1 para continuar",30,150,250)
+		draw_text(pantalla," F2 para salir",30,130,300)
 		pygame.display.flip()
 
 
