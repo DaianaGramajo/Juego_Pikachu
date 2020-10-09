@@ -30,17 +30,21 @@ boton2=(300,340)
 colorboton2=[plomo,rojo]
 boton3=(300,390)
 colorboton3=[plomo,rojo]
-boton4=(300,300)
+#datos de los botones en Ganador
+boton4=(150,300)
 colorboton4=[plomo,rojo]
-boton5=(300,350)
+boton9=(150,250)
+colorboton9=[plomo,rojo]
+#datos de los botones en  Fin de juego
+boton5=(450,300)
 colorboton5=[plomo,rojo]
-boton6=(250,200)
+boton6=(450,200)
 colorboton6=[plomo,rojo]
-boton7=(200,250)
+boton7=(450,250)
 colorboton7=[plomo,rojo]
+#datos del boton en Controles
 boton8=(300,390)
 colorboton8 =[plomo,rojo]
-
 
 def draw_text(surface, text, size, x, y):
 	font = pygame.font.SysFont("comicsansms", size)
@@ -271,6 +275,8 @@ def botones(texto,superficie,estado,posicionamiento,tam,identidad=None):
 			#	quit()
 			elif identidad == "VolveralmenuOpciones":
 				introduccion()
+			elif identidad == "volverajugar":
+				gameloop()
 		boton = pygame.draw.rect(superficie,estado[1],(posicionamiento[0],posicionamiento[1],tam[0],tam[1]))
 		textoboton(texto,negro,posicionamiento[0],posicionamiento[1],tam[0],tam[1])
 	else:
@@ -286,8 +292,9 @@ def fin_juego():
 		pantalla.blit(perdio,[0,0])
 		mensaje("¡Perdiste! ",negro,-200,tamaño="grande")
 		mensaje("Tu puntuacion obtenida fue:  " + str(suma),negro,-150,tamaño="mediano")
+		botones("Jugar otra vez",pantalla,colorboton6,boton6,tamboton,identidad="volverajugar")
 		botones("Salir",pantalla,colorboton5,boton5,tamboton,identidad="salirPerder")
-		botones("Ir al menu",pantalla,colorboton4,boton4,tamboton,identidad="Volver al menu")
+		botones("Ir al menu",pantalla,colorboton7,boton7,tamboton,identidad="Volver al menu")
 		pygame.display.update()
 		for event in pygame.event.get():
 			if event.type == pygame.KEYDOWN:
@@ -396,8 +403,8 @@ def ganador():
 		
 		mensaje("¡Ganaste!",negro,-200,tamaño="grande")
 		mensaje("Tu puntuacion obtenida fue:  " + str(suma),negro,-150,tamaño="mediano")
-		botones("Salir",pantalla,colorboton5,boton5,tamboton,identidad="salirPerder")
-		botones("Ir al menu",pantalla,colorboton4,boton4,tamboton,identidad="Volver al menu")
+		botones("Salir",pantalla,colorboton4,boton4,tamboton,identidad="salirPerder")
+		botones("Ir al menu",pantalla,colorboton9,boton9,tamboton,identidad="Volver al menu")
 		#mensaje("ir al menu:c ",negro,-100,tamaño="mediano")
 		#mensaje("salir:x ",negro,-50,tamaño="mediano")
 		pygame.display.update()
