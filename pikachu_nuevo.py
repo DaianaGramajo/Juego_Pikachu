@@ -275,8 +275,7 @@ def botones(texto,superficie,estado,posicionamiento,tam,identidad=None):
 			#	quit()
 			elif identidad == "VolveralmenuOpciones":
 				introduccion()
-			elif identidad == "volverajugar":
-				gameloop()
+				
 		boton = pygame.draw.rect(superficie,estado[1],(posicionamiento[0],posicionamiento[1],tam[0],tam[1]))
 		textoboton(texto,negro,posicionamiento[0],posicionamiento[1],tam[0],tam[1])
 	else:
@@ -292,7 +291,6 @@ def fin_juego():
 		pantalla.blit(perdio,[0,0])
 		mensaje("¡Perdiste! ",negro,-200,tamaño="grande")
 		mensaje("Tu puntuacion obtenida fue:  " + str(suma),negro,-150,tamaño="mediano")
-		botones("Jugar otra vez",pantalla,colorboton6,boton6,tamboton,identidad="volverajugar")
 		botones("Salir",pantalla,colorboton5,boton5,tamboton,identidad="salirPerder")
 		botones("Ir al menu",pantalla,colorboton7,boton7,tamboton,identidad="Volver al menu")
 		pygame.display.update()
